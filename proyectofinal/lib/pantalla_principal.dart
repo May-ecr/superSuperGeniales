@@ -1,0 +1,57 @@
+import 'package:flutter/material.dart'; 
+import 'cuestionario.dart';
+
+class pantallaPrincipal extends StatefulWidget{
+  const pantallaPrincipal({super.key});
+
+  @override
+  State<pantallaPrincipal> createState(){
+   return  _pantallaPrincipalState();
+  //  el StatefulWidget es una cosa que tiene dos partes, el estado y un
+  //  widget(no entiendo que es el widget jaja) entonces en el estado 
+  //  es donde se ponen o donde van las cosas que cambian
+  }
+}
+
+class _pantallaPrincipalState extends State<pantallaPrincipal>{
+  //esta clase guarda todo lo que puede cambiar en nuestra bella pantalla 
+
+  @override
+  Widget build(BuildContext context) {
+    // el método build es lit construir, flutter ejecuta lo que pongamos
+    //aquí cada vez que la pantalla se actualice o refresque como cuando 
+    //agreguemos un gasto se tiene que volver a construir para mostrar el
+    //nuevo gasto
+    return Scaffold(//este es como una estructura para que la pantalla 
+    //se vea linda, me imagino como el body en web 
+    //dentro de aqui podemos poner los demas elementos que iran en nuestra bella pantalla
+    appBar: AppBar(//appBar es como un espacio para una barra en la parte 
+    //de arriba de la pantalla
+      title: const Text("Mis gastos"),
+    ),
+    body: const Center(//este es como el contenido principal de nuestra pantalla
+      //y con center, centrará todo lo que esté adentro
+      child: Text ("aqui irá todo el merequetengue"),
+      // el child es como un bebé, o sea por ejemplo el body es una caja
+      // que es el papá, entonces child es una caja bebé dentro de la caja pantallaPrincipal
+      // y cuando es child es pq en esta cajita solo habr´ra un elemento y 
+      // cuando es children es que en esa caja puede haber más elementos que solo 1
+    ),
+
+    floatingActionButton: FloatingActionButton(
+      // floatingActionButton es un bontoncito flotante y redondito
+      onPressed: () {//aqui ponemos lo que pasa cuando lo presionamos
+        Navigator.of(context).push(//aqui ya le decimos al boton lo que queremos que haga
+        //que sería cambiar a la pantalla del fomulario
+          MaterialPageRoute(
+            builder: (context) => const Cuestionario(),
+            ),
+        );
+      }, 
+      child: const Icon(Icons.add),//con icons icon.add le decimos q adentro
+      //del boton ira el icono + 
+    ),
+    );
+  }  
+      
+}
