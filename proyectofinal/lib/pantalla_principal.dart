@@ -15,6 +15,8 @@ class pantallaPrincipal extends StatefulWidget{
 
 class _pantallaPrincipalState extends State<pantallaPrincipal>{
   //esta clase guarda todo lo que puede cambiar en nuestra bella pantalla 
+  final List<String> _gastos = [];//para guardar los gastos, el _ significa que es privada la variable
+
 
   @override
   Widget build(BuildContext context) {
@@ -29,29 +31,51 @@ class _pantallaPrincipalState extends State<pantallaPrincipal>{
     //de arriba de la pantalla
       title: const Text("Mis gastos"),
     ),
-    body: const Center(//este es como el contenido principal de nuestra pantalla
+    body: _gastos.isEmpty ? const Center(//este es como el contenido principal de nuestra pantalla
       //y con center, centrará todo lo que esté adentro
-      child: Text ("aqui irá todo el merequetengue"),
+      //child: Text ("aqui irá todo el merequetengue"),
       // el child es como un bebé, o sea por ejemplo el body es una caja
       // que es el papá, entonces child es una caja bebé dentro de la caja pantallaPrincipal
       // y cuando es child es pq en esta cajita solo habr´ra un elemento y 
       // cuando es children es que en esa caja puede haber más elementos que solo 1
-    ),
+      child: Text("todavía no hay gastukis"),
+    )
+    : ListView.builder(//crea una lista automatica
+      itemCount: _gastos.length,//cuenta los elemetos
+      itemBuilder: (context,index){//se ejecuta una vez por elemento
+        return ListTile(//pone la lista linda
+          title: Text(_gastos[index]),
+        );
+      },
+      ),
 
     floatingActionButton: FloatingActionButton(
       // floatingActionButton es un bontoncito flotante y redondito
-      onPressed: () {//aqui ponemos lo que pasa cuando lo presionamos
-        Navigator.of(context).push(//aqui ya le decimos al boton lo que queremos que haga
-        //que sería cambiar a la pantalla del fomulario
-          MaterialPageRoute(
-            builder: (context) => const Cuestionario(),
-            ),
+      onPressed: () async {//aqui ponemos lo que pasa cuando lo presionamos
+        // Navigator.of(context).push(//aqui ya le decimos al boton lo que queremos que haga
+        // //que sería cambiar a la pantalla del fomulario
+        //   MaterialPageRoute(
+        //     builder: (context) => const Cuestionario(),
+        //     ),
+        // );async es que espera un valor
+        final nuevoGasto = await Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const Cuestionario(),),
         );
+        if (nuevoGasto != null){
+          _agregarGasto(nuevoGasto);
+        }
       }, 
       child: const Icon(Icons.add),//con icons icon.add le decimos q adentro
       //del boton ira el icono + 
     ),
     );
   }  
+
+  void _agregarGasto(String nuevoGasto) {//para que la pantalla se reconstruya
+  //cada vex que agreguemos algo nuevo 
+    setState((){
+      _gastos.add(nuevoGasto);//agrega los gastos
+    });
+  }
       
 }
