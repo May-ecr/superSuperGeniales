@@ -14,6 +14,8 @@ class Cuestionario extends StatefulWidget{
 //se crea para guardar todos los datos del cuestionario
 class _CuestionarioState extends State<Cuestionario>{
 
+
+
 // @override
 //   Widget build(BuildContext context) {
 //     return const MaterialApp(
@@ -30,6 +32,26 @@ class _CuestionarioState extends State<Cuestionario>{
 final TextEditingController _tituloControlador = TextEditingController();
 final TextEditingController _cantidadControlador = TextEditingController();
 //variablespara guardar lo que pone el usuario
+
+// h  variable para guardar la fecha
+DateTime? _fechaSeleccionada;
+
+// h esto es para poder abrir el calendario 
+void _seleccionarFecha() async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2035),
+    );
+    if (picked != null) {
+      setState(() {
+        _fechaSeleccionada = picked;
+      });
+    }
+  }
+
+
 @override
   Widget build(BuildContext context) {
     return Scaffold(//contenedor principal
@@ -52,14 +74,40 @@ final TextEditingController _cantidadControlador = TextEditingController();
                 ),
                 keyboardType: TextInputType.number,//para teclado numerico
               ),
-              SizedBox(height: 30,),
+              //h fila para elegir la fecha 
+              Row(// es como una caja para organizar los elementos 
+              children: [
+                Expanded(
+                  child: Text(
+                    _fechaSeleccionada == null
+                        ? "Fecha no elegida"
+                        : "Fecha: ${_fechaSeleccionada!.day}/${_fechaSeleccionada!.month}/${_fechaSeleccionada!.year}",
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.calendar_today),
+                  onPressed: _seleccionarFecha,
+                ),
+              ],
+            ),
+              //h
+              const SizedBox(height: 30,),
+
               ElevatedButton(//boton normal
                 onPressed: () {
                   final titulo = _tituloControlador.text;
                   final cantidad = _cantidadControlador.text;
+                  //hle agreggamos la fehca
+                  final fechaTexto = _fechaSeleccionada == null
+                    ? "Sin fecha" //indicara que no tiene fecha si no la selecionamos 
+                    //,ostrara la fecha
+                    : "${_fechaSeleccionada!.day}/${_fechaSeleccionada!.month}/${_fechaSeleccionada!.year}";
 
-                  final textoFinal = "$titulo - \$${cantidad}";
-                Navigator.pop(context, textoFinal);//cierra la pantalla y muestra el texto
+                //  h ahora tiene la fecha en el texto final
+                final textoFinal = "$titulo - \$${cantidad} - $fechaTexto"; //ahi solo le agregue la de la fecha para que lo muestre 
+                Navigator.pop(context, textoFinal);
+
+                //cierra la pantalla y muestra el texto
               },
               child: Text("Guardar"),
               ),

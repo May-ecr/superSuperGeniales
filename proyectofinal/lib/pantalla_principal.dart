@@ -6,12 +6,17 @@ class pantallaPrincipal extends StatefulWidget{
 
   @override
   State<pantallaPrincipal> createState(){
-   return  _pantallaPrincipalState();
+  return  _pantallaPrincipalState();
   //  el StatefulWidget es una cosa que tiene dos partes, el estado y un
   //  widget(no entiendo que es el widget jaja) entonces en el estado 
   //  es donde se ponen o donde van las cosas que cambian
   }
 }
+
+
+
+//fin hann 
+
 
 class _pantallaPrincipalState extends State<pantallaPrincipal>{
   //esta clase guarda todo lo que puede cambiar en nuestra bella pantalla 
