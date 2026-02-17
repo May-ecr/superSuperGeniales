@@ -14,24 +14,13 @@ class Cuestionario extends StatefulWidget{
 //se crea para guardar todos los datos del cuestionario
 class _CuestionarioState extends State<Cuestionario>{
 
-
-
-// @override
-//   Widget build(BuildContext context) {
-//     return const MaterialApp(
-//       home: Scaffold(
-//         body: Center(
-//           child: Text("HOLAAAAAAAA SOLO QUIERO VER SI ESTO FUNCIONA "),
-//         ),
-//       ),
-//     );
-//   }
-
 //dentro de aqui van todas las cosas que se van a ver en pantalla
 //botones cajas de texto y mas
 final TextEditingController _tituloControlador = TextEditingController();
 final TextEditingController _cantidadControlador = TextEditingController();
 //variablespara guardar lo que pone el usuario
+
+String _seleccionarCategoria = "DIVIS";
 
 // h  variable para guardar la fecha
 DateTime? _fechaSeleccionada;
@@ -59,6 +48,7 @@ void _seleccionarFecha() async {
         body: Padding(//es espacio alrededor 
           padding: EdgeInsets.all(16),//agrega 16 pixeles para todo los datos 
           child: Column(//sirve para agregar cosas una debajo de otra de forma vertical
+          //AQUIIII O EN DONDE???
             children: [//todos los elementos dentro de la columna se guardan en los children
               TextField(//es la caja donde el usuario escribira 
                 controller: _tituloControlador,//conectar las variables con los textfield
@@ -67,32 +57,62 @@ void _seleccionarFecha() async {
                 ),
               ),
               SizedBox(height: 20), //sirve para separar un campo de otro
-              TextField(
+
+            const SizedBox(height: 20,),
+
+            Row(
+              children: [
+                Expanded(child: 
+                TextField(
                 controller: _cantidadControlador,
                 decoration: InputDecoration(
-                  labelText: 'Cantidad',
+                labelText: 'Cantidad',
                 ),
                 keyboardType: TextInputType.number,//para teclado numerico
               ),
+              ),
+              const SizedBox(width: 20,),
+
               //h fila para elegir la fecha 
               Row(// es como una caja para organizar los elementos 
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,//sirve para acomodar los elementos, tecnicamente dice manda todo lo que este aqui al final row es a la derecha
               children: [
-                Expanded(
-                  child: Text(
-                    _fechaSeleccionada == null
-                        ? "Fecha no elegida"
-                        : "Fecha: ${_fechaSeleccionada!.day}/${_fechaSeleccionada!.month}/${_fechaSeleccionada!.year}",
-                  ),
-                ),
+              Text(
+                _fechaSeleccionada == null
+                ?"Fecha no elegida" : "${_fechaSeleccionada!.day}/${_fechaSeleccionada!.month}/${_fechaSeleccionada!.year}",
+              ),
+              
                 IconButton(
                   icon: const Icon(Icons.calendar_today),
                   onPressed: _seleccionarFecha,
                 ),
               ],
             ),
-              //h
-              const SizedBox(height: 30,),
+            ],
+            ),
 
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+              DropdownButton(//lista desplegable 
+              value: _seleccionarCategoria, //usa la variable de arriba para que ya este una seleccionada
+              items: ['COMIDA', 'VIAJE', 'DIVIS', 'TRABAJO'].map((categoria) => DropdownMenuItem(value: categoria,//opciones de la lista, el map lo convierte en un elemento del menu 
+              child: Text(categoria)
+              ))
+              .toList(),//convierte todo en una lista
+              onChanged: (nuevaCategoria){//guarda lo que selecciona el usuario
+                setState(() {//sirve para actualizar la pantalla
+                  _seleccionarCategoria = nuevaCategoria!;
+                });
+              } ,
+              ),
+
+              Row(children: [
+                TextButton(onPressed: (){Navigator.pop(context);
+                }, child: const Text("Cancelar"),
+                ),
+                const SizedBox(width: 10,),//sirve de separador
+                //h
               ElevatedButton(//boton normal
                 onPressed: () {
                   final titulo = _tituloControlador.text;
@@ -104,13 +124,20 @@ void _seleccionarFecha() async {
                     : "${_fechaSeleccionada!.day}/${_fechaSeleccionada!.month}/${_fechaSeleccionada!.year}";
 
                 //  h ahora tiene la fecha en el texto final
-                final textoFinal = "$titulo - \$${cantidad} - $fechaTexto"; //ahi solo le agregue la de la fecha para que lo muestre 
+                final textoFinal = "$titulo - \$$cantidad - $fechaTexto"; //ahi solo le agregue la de la fecha para que lo muestre 
                 Navigator.pop(context, textoFinal);
 
                 //cierra la pantalla y muestra el texto
               },
               child: Text("Guardar"),
+
               ),
+
+              ],)
+              ],
+            ),
+
+              
             ],
           )
       ),

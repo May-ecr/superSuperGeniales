@@ -66,6 +66,10 @@ class _pantallaPrincipalState extends State<pantallaPrincipal>{
         final nuevoGasto = await Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => const Cuestionario(),),
         );
+
+        print("VALORR QUE SE REGRESA: $nuevoGasto");
+
+
         if (nuevoGasto != null){
           _agregarGasto(nuevoGasto);
         }
