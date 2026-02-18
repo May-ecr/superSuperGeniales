@@ -29,7 +29,7 @@ class PantallaGrafica extends StatelessWidget {
             _crearLeyenda(),
           ],
           ),
-         ),
+        ),
     );
     
   }

@@ -32,12 +32,30 @@ class _pantallaPrincipalState extends State<pantallaPrincipal>{
     //aquí cada vez que la pantalla se actualice o refresque como cuando 
     //agreguemos un gasto se tiene que volver a construir para mostrar el
     //nuevo gasto
-    return Scaffold(//este es como una estructura para que la pantalla 
+    return Scaffold(
+    backgroundColor: Colors.blue.shade100,//este es como una estructura para que la pantalla 
     //se vea linda, me imagino como el body en web 
     //dentro de aqui podemos poner los demas elementos que iran en nuestra bella pantalla
     appBar: AppBar(//appBar es como un espacio para una barra en la parte 
     //de arriba de la pantalla
-      title: const Text("Mis gastos"),
+      title: Text("Mis gastos",
+      
+      style: const TextStyle(
+        fontSize: 26,
+        fontWeight: FontWeight.bold,
+        color: Colors.black,
+        shadows: [
+          Shadow(
+            offset: Offset(2, 2),
+            blurRadius: 4,
+            color: Colors.black26,
+
+          )
+        ]
+      ) ,
+      ),
+      centerTitle: true,
+      backgroundColor: Colors.deepPurple.shade200,
       actions: [//botoncito para ver la grafica 
         IconButton(
           icon: const Icon(Icons.pie_chart),
@@ -92,7 +110,7 @@ class _pantallaPrincipalState extends State<pantallaPrincipal>{
         }
         }
       },
-       
+      
       child: const Icon(Icons.add),//con icons icon.add le decimos q adentro
       //del boton ira el icono + 
     ),
@@ -115,5 +133,4 @@ class _pantallaPrincipalState extends State<pantallaPrincipal>{
 
     );
   }
-      
 }

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'models/modelo_gastos.dart';
 
@@ -45,16 +47,25 @@ void _seleccionarFecha() async {
 @override
   Widget build(BuildContext context) {
     return Scaffold(//contenedor principal
+    backgroundColor: Colors.lightBlue.shade50,
 //da el lugar para poner el contenido es como un marco 
         body: Padding(//es espacio alrededor 
           padding: EdgeInsets.all(16),//agrega 16 pixeles para todo los datos 
-          child: Column(//sirve para agregar cosas una debajo de otra de forma vertical
+          child:
+          Column(//sirve para agregar cosas una debajo de otra de forma vertical
           //AQUIIII O EN DONDE???
             children: [//todos los elementos dentro de la columna se guardan en los children
-              TextField(//es la caja donde el usuario escribira 
+              
+              TextField(//es la caja donde el usuario escribira
+              
+                
+
+              
                 controller: _tituloControlador,//conectar las variables con los textfield
-                decoration: InputDecoration(
-                  labelText: 'TITULO'
+                textAlign: TextAlign.center,
+                decoration: const InputDecoration(
+                labelText: 'TITULO',
+                border: OutlineInputBorder(),
                 ),
               ),
               SizedBox(height: 20), //sirve para separar un campo de otro
@@ -66,8 +77,10 @@ void _seleccionarFecha() async {
                 Expanded(child: 
                 TextField(
                 controller: _cantidadControlador,
-                decoration: InputDecoration(
-                labelText: 'Cantidad',
+                textAlign: TextAlign.center,
+                decoration: const InputDecoration(
+                labelText: 'CANTIDAD',
+                border: OutlineInputBorder()
                 ),
                 keyboardType: TextInputType.number,//para teclado numerico
               ),
@@ -81,6 +94,9 @@ void _seleccionarFecha() async {
               Text(
                 _fechaSeleccionada == null
                 ?"Fecha no elegida" : "${_fechaSeleccionada!.day}/${_fechaSeleccionada!.month}/${_fechaSeleccionada!.year}",
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 16),
+                
               ),
               
                 IconButton(
@@ -106,13 +122,26 @@ void _seleccionarFecha() async {
                   _seleccionarCategoria = nuevaCategoria!;
                 });
               } ,
+              dropdownColor: Colors.lightBlue.shade50, //fonfo 
+                icon: const Icon(Icons.arrow_drop_down, color: Colors.blueAccent), //
+                style: const TextStyle(
+                  fontFamily: 'Poppins', // tipografía distinta
+                  fontSize: 16,
+                  color: Colors.black,
+                ),
+
+
               ),
 
               Row(children: [
                 TextButton(onPressed: (){Navigator.pop(context);
-                }, child: const Text("Cancelar"),
+                }, 
+                style: TextButton.styleFrom(
+                side: const BorderSide(color: Colors.blue, width: 1), // borde azul
+      ),
+                child: const Text("Cancelar"),
                 ),
-                const SizedBox(width: 10,),//sirve de separador
+                const SizedBox(width: 15,),//sirve de separador
                 //h
               ElevatedButton(//boton normal
                 onPressed: () {
@@ -133,6 +162,11 @@ void _seleccionarFecha() async {
 
                 //cierra la pantalla y muestra el texto
               },
+              style: ElevatedButton.styleFrom(
+                side: const BorderSide(color: Colors.blue, width: 1), 
+                
+              ),
+
               child: Text("Guardar"),
 
               ),
