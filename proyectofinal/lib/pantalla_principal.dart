@@ -20,8 +20,11 @@ class pantallaPrincipal extends StatefulWidget{
 
 class _pantallaPrincipalState extends State<pantallaPrincipal>{
   //esta clase guarda todo lo que puede cambiar en nuestra bella pantalla 
-  final List<String> _gastos = [];//para guardar los gastos, el _ significa que es privada la variable
+  //final List<String> _gastos = [];
+  //
+  ////para guardar los gastos, el _ significa que es privada la variable
 
+  final List<Map<String, dynamic>> _gastos = [];
 
   @override
   Widget build(BuildContext context) {
@@ -48,8 +51,26 @@ class _pantallaPrincipalState extends State<pantallaPrincipal>{
     : ListView.builder(//crea una lista automatica
       itemCount: _gastos.length,//cuenta los elemetos
       itemBuilder: (context,index){//se ejecuta una vez por elemento
-        return ListTile(//pone la lista linda
-          title: Text(_gastos[index]),
+      final gasto = _gastos[index];
+        return Card(//pone la lista linda
+        elevation: 4,
+        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadiusGeometry.circular(12),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Titulo: ${gasto["Titulo"]}"),
+              Text("Cantidad: ${gasto["Cantidad"]}"),
+              Text("Fecha: ${gasto["Fecha"]}"),
+              Text("Categoria: ${gasto["Categoria"]}",)
+            ],
+          ),
+        ),
+          //title: Text(_gastos[index]),
         );
       },
       ),
@@ -67,9 +88,6 @@ class _pantallaPrincipalState extends State<pantallaPrincipal>{
           MaterialPageRoute(builder: (context) => const Cuestionario(),),
         );
 
-        print("VALORR QUE SE REGRESA: $nuevoGasto");
-
-
         if (nuevoGasto != null){
           _agregarGasto(nuevoGasto);
         }
@@ -80,7 +98,7 @@ class _pantallaPrincipalState extends State<pantallaPrincipal>{
     );
   }  
 
-  void _agregarGasto(String nuevoGasto) {//para que la pantalla se reconstruya
+  void _agregarGasto(Map<String, dynamic> nuevoGasto) {//para que la pantalla se reconstruya
   //cada vex que agreguemos algo nuevo 
     setState((){
       _gastos.add(nuevoGasto);//agrega los gastos

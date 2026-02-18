@@ -124,10 +124,13 @@ void _seleccionarFecha() async {
                     : "${_fechaSeleccionada!.day}/${_fechaSeleccionada!.month}/${_fechaSeleccionada!.year}";
 
                 //  h ahora tiene la fecha en el texto final
-                final textoFinal = "$titulo - \$$cantidad - $fechaTexto"; //ahi solo le agregue la de la fecha para que lo muestre 
-                Navigator.pop(context, textoFinal);
-
-                //cierra la pantalla y muestra el texto
+                final Map<String, dynamic> datosGasto = {
+                  'Titulo' : titulo.isEmpty ? 'sin titulo' : titulo,
+                  'Cantidad' : cantidad.isEmpty ? '0' : cantidad,
+                  'Fecha' : fechaTexto,
+                  'Categoria' : _seleccionarCategoria,
+                };
+                Navigator.pop(context, datosGasto);
               },
               child: Text("Guardar"),
 
