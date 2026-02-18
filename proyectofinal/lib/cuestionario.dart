@@ -21,7 +21,7 @@ final TextEditingController _tituloControlador = TextEditingController();
 final TextEditingController _cantidadControlador = TextEditingController();
 //variablespara guardar lo que pone el usuario
 
-String _seleccionarCategoria = "DIVIS";
+String _seleccionarCategoria = "Gym";
 
 // h  variable para guardar la fecha
 DateTime? _fechaSeleccionada;
