@@ -1,5 +1,7 @@
-import 'package:flutter/material.dart'; 
+import 'package:flutter/material.dart';
+import 'package:proyectofinal/models/modelo_gastos.dart'; 
 import 'cuestionario.dart';
+import 'package:proyectofinal/pantalla_grafica.dart';
 
 class pantallaPrincipal extends StatefulWidget{
   const pantallaPrincipal({super.key});
@@ -20,7 +22,7 @@ class pantallaPrincipal extends StatefulWidget{
 
 class _pantallaPrincipalState extends State<pantallaPrincipal>{
   //esta clase guarda todo lo que puede cambiar en nuestra bella pantalla 
-  final List<String> _gastos = [];//para guardar los gastos, el _ significa que es privada la variable
+  final List<Gasto> _gastos = [];//para guardar los gastos, el _ significa que es privada la variable
 
 
   @override
@@ -35,6 +37,12 @@ class _pantallaPrincipalState extends State<pantallaPrincipal>{
     appBar: AppBar(//appBar es como un espacio para una barra en la parte 
     //de arriba de la pantalla
       title: const Text("Mis gastos"),
+      actions: [//botoncito para ver la grafica 
+        IconButton(
+          icon: const Icon(Icons.pie_chart),
+          onPressed: _mostrarGrafica,
+        ),
+      ],
     ),
     body: _gastos.isEmpty ? const Center(//este es como el contenido principal de nuestra pantalla
       //y con center, centrará todo lo que esté adentro
@@ -43,13 +51,16 @@ class _pantallaPrincipalState extends State<pantallaPrincipal>{
       // que es el papá, entonces child es una caja bebé dentro de la caja pantallaPrincipal
       // y cuando es child es pq en esta cajita solo habr´ra un elemento y 
       // cuando es children es que en esa caja puede haber más elementos que solo 1
-      child: Text("todavía no hay gastukis"),
+      child: Text("No hay gastos."),
     )
     : ListView.builder(//crea una lista automatica
       itemCount: _gastos.length,//cuenta los elemetos
       itemBuilder: (context,index){//se ejecuta una vez por elemento
+        final gasto = _gastos[index];
         return ListTile(//pone la lista linda
-          title: Text(_gastos[index]),
+          title: Text(gasto.titulo),
+          subtitle: Text("${gasto.categoria}, ${gasto.fecha.day}/${gasto.fecha.month}"),
+          trailing: Text("\$${gasto.cantidad.toStringAsFixed(2)}"),
         );
       },
       ),
@@ -64,13 +75,10 @@ class _pantallaPrincipalState extends State<pantallaPrincipal>{
         //     ),
         // );async es que espera un valor
         final nuevoGasto = await Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const Cuestionario(),),
+          MaterialPageRoute(builder: (context) => const Cuestionario()),
         );
 
-        print("VALORR QUE SE REGRESA: $nuevoGasto");
-
-
-        if (nuevoGasto != null){
+        if (nuevoGasto != null && nuevoGasto is Gasto){
           _agregarGasto(nuevoGasto);
         }
       }, 
@@ -80,11 +88,20 @@ class _pantallaPrincipalState extends State<pantallaPrincipal>{
     );
   }  
 
-  void _agregarGasto(String nuevoGasto) {//para que la pantalla se reconstruya
+  void _agregarGasto(Gasto nuevoGasto) {//para que la pantalla se reconstruya
   //cada vex que agreguemos algo nuevo 
     setState((){
       _gastos.add(nuevoGasto);//agrega los gastos
     });
+  }
+
+  void _mostrarGrafica(){
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => PantallaGrafica(gastos: _gastos),
+        ),
+
+    );
   }
       
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'models/modelo_gastos.dart';
 
 //crea una pantalla que va a cambiar cuando se presione un boton, es crear un lienzo en blanco 
 class Cuestionario extends StatefulWidget{
@@ -116,16 +117,20 @@ void _seleccionarFecha() async {
               ElevatedButton(//boton normal
                 onPressed: () {
                   final titulo = _tituloControlador.text;
-                  final cantidad = _cantidadControlador.text;
+                  final cantidad = double.tryParse(_cantidadControlador.text) ?? 0.0;
                   //hle agreggamos la fehca
-                  final fechaTexto = _fechaSeleccionada == null
-                    ? "Sin fecha" //indicara que no tiene fecha si no la selecionamos 
-                    //,ostrara la fecha
-                    : "${_fechaSeleccionada!.day}/${_fechaSeleccionada!.month}/${_fechaSeleccionada!.year}";
+                  final fecha = _fechaSeleccionada ?? DateTime.now();
+                                  //  h ahora tiene la fecha en el texto final
+                // final textoFinal = "$titulo - \$$cantidad - $fechaTexto"; //ahi solo le agregue la de la fecha para que lo muestre 
+                // Navigator.pop(context, textoFinal);
+                  final nuevoGasto = Gasto(
+                    titulo: titulo,
+                    cantidad: cantidad,
+                    categoria: _seleccionarCategoria,
+                    fecha: fecha,
 
-                //  h ahora tiene la fecha en el texto final
-                final textoFinal = "$titulo - \$$cantidad - $fechaTexto"; //ahi solo le agregue la de la fecha para que lo muestre 
-                Navigator.pop(context, textoFinal);
+                  );
+                  Navigator.pop(context, nuevoGasto);
 
                 //cierra la pantalla y muestra el texto
               },
