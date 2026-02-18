@@ -97,7 +97,7 @@ void _seleccionarFecha() async {
               children: [
               DropdownButton(//lista desplegable 
               value: _seleccionarCategoria, //usa la variable de arriba para que ya este una seleccionada
-              items: ['COMIDA', 'VIAJE', 'DIVIS', 'TRABAJO'].map((categoria) => DropdownMenuItem(value: categoria,//opciones de la lista, el map lo convierte en un elemento del menu 
+              items: ['COMIDA', 'VIAJE', 'Gym', 'TRABAJO'].map((categoria) => DropdownMenuItem(value: categoria,//opciones de la lista, el map lo convierte en un elemento del menu 
               child: Text(categoria)
               ))
               .toList(),//convierte todo en una lista
