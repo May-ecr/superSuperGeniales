@@ -79,13 +79,20 @@ class _pantallaPrincipalState extends State<pantallaPrincipal>{
         return Card(//pone la lista linda
         margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
         elevation: 2,
+        
         child: ListTile(
+        leading: Text( // agregamos iconos
+          _getEmojiForCategory(gasto.categoria),
+          style: const TextStyle(fontSize: 24),
+        ),
         title: Text(gasto.titulo),
         subtitle: Text(
-          "${gasto.categoria},${gasto.fecha.day}/${gasto.fecha.month}/${gasto.fecha.year}",
+          "${gasto.categoria}, ${gasto.fecha.day}/${gasto.fecha.month}/${gasto.fecha.year}",
         ),
-          trailing: Text(
-            "\$${gasto.cantidad.toStringAsFixed(2)}"),
+        trailing: Text(
+          "\$${gasto.cantidad.toStringAsFixed(2)}",
+
+        ),
         ),
         );
         },
@@ -132,5 +139,20 @@ class _pantallaPrincipalState extends State<pantallaPrincipal>{
         ),
 
     );
+  }
+}
+
+String _getEmojiForCategory(String category) {
+  switch (category) {
+    case 'COMIDA':
+      return '🍔';
+    case 'VIAJE':
+      return '✈️';
+    case 'Gym':
+      return '🏋️';
+    case 'TRABAJO':
+      return '🧳';
+    default:
+      return '❓';
   }
 }

@@ -12,8 +12,11 @@ class PantallaGrafica extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.purple.shade100,
         title: const Text("Gastos por categoría"),
+        
       ),
+      backgroundColor: Colors.blue.shade100,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -65,7 +68,7 @@ class PantallaGrafica extends StatelessWidget {
           titleStyle: const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: Colors.black,
           ),
         ),
       );
@@ -81,50 +84,70 @@ class PantallaGrafica extends StatelessWidget {
       ),
     );
   }
-
-  Widget _crearLeyenda() {
-    //agrupar para poner la leyenda con otro map
-    Map<String, double> gastosPorCategoria = {};
-    double totalGeneral = 0;
-
-    for (var gasto in gastos){
-      totalGeneral += gasto.cantidad;
-      if(gastosPorCategoria.containsKey(gasto.categoria)){
-        gastosPorCategoria[gasto.categoria] =
-          gastosPorCategoria[gasto.categoria]! + gasto.cantidad; 
-      }else{
-        gastosPorCategoria[gasto.categoria] = gasto.cantidad;
-      }
-    }
-
-    return Column(
-      children: gastosPorCategoria.entries.map((entry){
-        int index = gastosPorCategoria.keys.toList().indexOf(entry.key);
-        double porcentaje = (entry.value / totalGeneral) * 100;
-
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4),
-          child: Row(
-            children: [
-              Container(
-                width: 20,
-                height: 20,
-                color: _getColorForCategory(entry.key, index),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  "${entry.key}: \$${entry.value.toStringAsFixed(2)} "
-                  "(${porcentaje.toStringAsFixed(1)}%)",
-                  style: const TextStyle(fontSize: 16),
-                ),
-                ),
-            ],
-            ),
-          );
-      }).toList(),
-    );
+  //h
+  String _getEmojiForCategory(String category) {
+  switch (category) {
+    case 'COMIDA':
+      return '🍔';
+    case 'VIAJE':
+      return '✈️';
+    case 'Gym':
+      return '🏋️';
+    case 'TRABAJO':
+      return '🧳';
+    default:
+      return '❓';
   }
+}
+
+  //
+
+    //agrupar para poner la leyenda con otro map
+ Widget _crearLeyenda() {
+  Map<String, double> gastosPorCategoria = {};
+  double totalGeneral = 0;
+
+  for (var gasto in gastos) {
+    totalGeneral += gasto.cantidad;
+    if (gastosPorCategoria.containsKey(gasto.categoria)) {
+      gastosPorCategoria[gasto.categoria] =
+          gastosPorCategoria[gasto.categoria]! + gasto.cantidad;
+    } else {
+      gastosPorCategoria[gasto.categoria] = gasto.cantidad;
+    }
+  }
+
+  return Column(
+    children: gastosPorCategoria.entries.map((entry) {
+      int index = gastosPorCategoria.keys.toList().indexOf(entry.key);
+      double porcentaje = (entry.value / totalGeneral) * 100;
+
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        child: Row(
+          children: [
+            Container(
+              width: 20,
+              height: 20,
+              color: _getColorForCategory(entry.key, index),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                "${_getEmojiForCategory(entry.key)} ${entry.key}: "
+                "\$${entry.value.toStringAsFixed(2)} "
+                "(${porcentaje.toStringAsFixed(1)}%)",
+                style: const TextStyle(fontSize: 16),
+              ),
+            ),
+          ],
+        ),
+      );
+    }).toList(),
+  );
+}
+
+    
 
   Color _getColorForCategory(String category, int index) {
     //colores para cada categoria 
