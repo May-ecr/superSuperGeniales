@@ -3,36 +3,41 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'models/modelo_gastos.dart';
 
-//crea una pantalla que va a cambiar cuando se presione un boton, es crear un lienzo en blanco 
 class Cuestionario extends StatefulWidget{
-  const Cuestionario({super.key});
+  final Gasto? gastoAEditar; // Para saber si estamos editando
+  final int? index; // Opcional, por si necesitas el índice
+  
+  const Cuestionario({super.key, this.gastoAEditar, this.index});
 
-//se crea para tener datos que pueden cambiar
   @override
   State<Cuestionario> createState() {
     return _CuestionarioState();
   }
 }
 
-//se crea para guardar todos los datos del cuestionario
 class _CuestionarioState extends State<Cuestionario>{
+  final TextEditingController _tituloControlador = TextEditingController();
+  final TextEditingController _cantidadControlador = TextEditingController();
 
-//dentro de aqui van todas las cosas que se van a ver en pantalla
-//botones cajas de texto y mas
-final TextEditingController _tituloControlador = TextEditingController();
-final TextEditingController _cantidadControlador = TextEditingController();
-//variablespara guardar lo que pone el usuario
+  String _seleccionarCategoria = "Gym";
+  DateTime? _fechaSeleccionada;
 
-String _seleccionarCategoria = "Gym";
+  @override
+  void initState() {
+    super.initState();
+    // Si estamos editando, llenamos los campos con los datos existentes
+    if (widget.gastoAEditar != null) {
+      _tituloControlador.text = widget.gastoAEditar!.titulo;
+      _cantidadControlador.text = widget.gastoAEditar!.cantidad.toString();
+      _seleccionarCategoria = widget.gastoAEditar!.categoria;
+      _fechaSeleccionada = widget.gastoAEditar!.fecha;
+    }
+  }
 
-// h  variable para guardar la fecha
-DateTime? _fechaSeleccionada;
-
-// h esto es para poder abrir el calendario 
-void _seleccionarFecha() async {
+  void _seleccionarFecha() async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: _fechaSeleccionada ?? DateTime.now(),
       firstDate: DateTime(2020),
       lastDate: DateTime(2035),
     );
@@ -43,143 +48,126 @@ void _seleccionarFecha() async {
     }
   }
 
-
-@override
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(//contenedor principal
-    backgroundColor: Colors.lightBlue.shade50,
-//da el lugar para poner el contenido es como un marco 
-        body: Padding(//es espacio alrededor 
-          padding: EdgeInsets.all(16),//agrega 16 pixeles para todo los datos 
-          child:
-          Column(//sirve para agregar cosas una debajo de otra de forma vertical
-          //AQUIIII O EN DONDE???
-            children: [//todos los elementos dentro de la columna se guardan en los children
-              
-              TextField(//es la caja donde el usuario escribira
-              
-                
-
-              
-                controller: _tituloControlador,//conectar las variables con los textfield
-                textAlign: TextAlign.center,
-                decoration: const InputDecoration(
-                labelText: 'TITULO',
+    return Scaffold(
+      backgroundColor: Colors.lightBlue.shade50,
+      appBar: AppBar(
+        title: Text(widget.gastoAEditar == null ? "Nuevo gasto" : "Editar gasto"),
+        backgroundColor: Colors.lightBlue,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            TextField(
+              controller: _tituloControlador,
+              textAlign: TextAlign.center,
+              decoration: const InputDecoration(
+                labelText: 'TÍTULO',
                 border: OutlineInputBorder(),
-                ),
               ),
-              SizedBox(height: 20), //sirve para separar un campo de otro
-
-            const SizedBox(height: 20,),
+            ),
+            const SizedBox(height: 20),
 
             Row(
               children: [
-                Expanded(child: 
-                TextField(
-                controller: _cantidadControlador,
-                textAlign: TextAlign.center,
-                decoration: const InputDecoration(
-                labelText: 'CANTIDAD',
-                border: OutlineInputBorder()
+                Expanded(
+                  child: TextField(
+                    controller: _cantidadControlador,
+                    textAlign: TextAlign.center,
+                    decoration: const InputDecoration(
+                      labelText: 'CANTIDAD',
+                      border: OutlineInputBorder()
+                    ),
+                    keyboardType: TextInputType.number,
+                  ),
                 ),
-                keyboardType: TextInputType.number,//para teclado numerico
-              ),
-              ),
-              const SizedBox(width: 20,),
-
-              //h fila para elegir la fecha 
-              Row(// es como una caja para organizar los elementos 
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,//sirve para acomodar los elementos, tecnicamente dice manda todo lo que este aqui al final row es a la derecha
-              children: [
-              Text(
-                _fechaSeleccionada == null
-                ?"Fecha no elegida" : "${_fechaSeleccionada!.day}/${_fechaSeleccionada!.month}/${_fechaSeleccionada!.year}",
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 16),
+                const SizedBox(width: 20),
                 
-              ),
-              
-                IconButton(
-                  icon: const Icon(Icons.calendar_today),
-                  onPressed: _seleccionarFecha,
+                Row(
+                  children: [
+                    Text(
+                      _fechaSeleccionada == null
+                          ? "Fecha no elegida" 
+                          : "${_fechaSeleccionada!.day}/${_fechaSeleccionada!.month}/${_fechaSeleccionada!.year}",
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.calendar_today),
+                      onPressed: _seleccionarFecha,
+                    ),
+                  ],
                 ),
               ],
             ),
-            ],
-            ),
+
+            const SizedBox(height: 20),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-              DropdownButton(//lista desplegable 
-              value: _seleccionarCategoria, //usa la variable de arriba para que ya este una seleccionada
-              items: ['COMIDA', 'VIAJE', 'Gym', 'TRABAJO'].map((categoria) => DropdownMenuItem(value: categoria,//opciones de la lista, el map lo convierte en un elemento del menu 
-              child: Text(categoria)
-              ))
-              .toList(),//convierte todo en una lista
-              onChanged: (nuevaCategoria){//guarda lo que selecciona el usuario
-                setState(() {//sirve para actualizar la pantalla
-                  _seleccionarCategoria = nuevaCategoria!;
-                });
-              } ,
-              dropdownColor: Colors.lightBlue.shade50, //fonfo 
-                icon: const Icon(Icons.arrow_drop_down, color: Colors.blueAccent), //
-                style: const TextStyle(
-                  fontFamily: 'Poppins', // tipografía distinta
-                  fontSize: 16,
-                  color: Colors.black,
+                DropdownButton(
+                  value: _seleccionarCategoria,
+                  items: ['COMIDA', 'VIAJE', 'Gym', 'TRABAJO'].map((categoria) => 
+                    DropdownMenuItem(
+                      value: categoria,
+                      child: Text(categoria)
+                    )
+                  ).toList(),
+                  onChanged: (nuevaCategoria){
+                    setState(() {
+                      _seleccionarCategoria = nuevaCategoria!;
+                    });
+                  },
+                  dropdownColor: Colors.lightBlue.shade50,
+                  icon: const Icon(Icons.arrow_drop_down, color: Colors.blueAccent),
+                  style: const TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 16,
+                    color: Colors.black,
+                  ),
                 ),
 
-
-              ),
-
-              Row(children: [
-                TextButton(onPressed: (){Navigator.pop(context);
-                }, 
-                style: TextButton.styleFrom(
-                side: const BorderSide(color: Colors.blue, width: 1), // borde azul
-      ),
-                child: const Text("Cancelar"),
-                ),
-                const SizedBox(width: 15,),//sirve de separador
-                //h
-              ElevatedButton(//boton normal
-                onPressed: () {
-                  final titulo = _tituloControlador.text;
-                  final cantidad = double.tryParse(_cantidadControlador.text) ?? 0.0;
-                  //hle agreggamos la fehca
-                  final fecha = _fechaSeleccionada ?? DateTime.now();
-                                  //  h ahora tiene la fecha en el texto final
-                  final nuevoGasto = Gasto(
-                    titulo: titulo,
-                    cantidad: cantidad,
-                    categoria: _seleccionarCategoria,
-                    fecha: fecha,
-
-                //  h ahora tiene la fecha en el texto final
-                  );
-                  Navigator.pop(context, nuevoGasto);
-
-                //cierra la pantalla y muestra el texto
-              },
-              style: ElevatedButton.styleFrom(
-                side: const BorderSide(color: Colors.blue, width: 1), 
-                
-              ),
-
-              child: Text("Guardar"),
-
-              ),
-
-              ],)
+                Row(
+                  children: [
+                    TextButton(
+                      onPressed: (){Navigator.pop(context);}, 
+                      style: TextButton.styleFrom(
+                        side: const BorderSide(color: Colors.blue, width: 1),
+                      ),
+                      child: const Text("Cancelar"),
+                    ),
+                    const SizedBox(width: 15),
+                    
+                    ElevatedButton(
+                      onPressed: () {
+                        final titulo = _tituloControlador.text;
+                        final cantidad = double.tryParse(_cantidadControlador.text) ?? 0.0;
+                        final fecha = _fechaSeleccionada ?? DateTime.now();
+                        
+                        final nuevoGasto = Gasto(
+                          titulo: titulo,
+                          cantidad: cantidad,
+                          categoria: _seleccionarCategoria,
+                          fecha: fecha,
+                        );
+                        
+                        Navigator.pop(context, nuevoGasto);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        side: const BorderSide(color: Colors.blue, width: 1), 
+                      ),
+                      child: Text(widget.gastoAEditar == null ? "Guardar" : "Actualizar"),
+                    ),
+                  ],
+                )
               ],
             ),
-
-              
-            ],
-          )
+          ],
+        )
       ),
-    
-  );
+    );
   }
 }

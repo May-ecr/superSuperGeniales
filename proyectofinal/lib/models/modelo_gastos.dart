@@ -1,18 +1,15 @@
-class Gasto {//datos que debe llevar un gasto 
+class Gasto {
   final String titulo;
   final double cantidad;
   final String categoria;
   final DateTime fecha;
+  final String id; // Opcional, para identificar gastos únicos
 
-  Gasto({//indicamos que todos los campos deben estar llenos 
+  Gasto({
     required this.titulo,
     required this.cantidad,
     required this.categoria,
     required this.fecha,
-  });
-
-  //formato para mostrar los datos 
-  String toDisplayString() {
-    return "$titulo - \$${cantidad.toStringAsFixed(2)} - ${fecha.day}/${fecha.month}/${fecha.year}";
-  }
+    String? id,
+  }) : id = id ?? DateTime.now().toString(); // ID único si no se proporciona
 }
